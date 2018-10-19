@@ -34,6 +34,8 @@
 
 #include "readline.hpp"
 
+int peng_non_history = FALSE;
+
 bool stdio_getline(FILE *in, std::string &str)
 {
     assert(in != nullptr);
@@ -109,7 +111,10 @@ public:
 
     void add_to_history(const std::string &phrase) override
     {
-        add_history(phrase.c_str());
+        if (!peng_non_history)
+        {
+            add_history(phrase.c_str());
+        }
     }
 };
 }

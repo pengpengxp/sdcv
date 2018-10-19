@@ -43,6 +43,8 @@
 
 static const char gVersion[] = VERSION;
 
+extern int peng_non_history;
+
 namespace
 {
 static void free_str_array(gchar **arr)
@@ -75,6 +77,7 @@ int main(int argc, char *argv[]) try {
     gboolean show_list_dicts = FALSE;
     glib::StrArr use_dict_list;
     gboolean non_interactive = FALSE;
+    gboolean non_history = FALSE;
     gboolean json_output = FALSE;
     gboolean no_fuzzy = FALSE;
     gboolean utf8_output = FALSE;
@@ -93,6 +96,12 @@ int main(int argc, char *argv[]) try {
           _("bookname") },
         { "non-interactive", 'n', 0, G_OPTION_ARG_NONE, &non_interactive,
           _("for use in scripts"), nullptr },
+
+        // add by pengpengxp begin
+        { "non-history", 'N', 0, G_OPTION_ARG_NONE, &non_history,
+          _("not record this word into history"), nullptr },
+        // add by pengpengxp end
+
         { "json-output", 'j', 0, G_OPTION_ARG_NONE, &json_output,
           _("print the result formatted as JSON"), nullptr },
         { "exact-search", 'e', 0, G_OPTION_ARG_NONE, &no_fuzzy,
@@ -152,6 +161,11 @@ int main(int argc, char *argv[]) try {
     if (show_list_dicts) {
         list_dicts(dicts_dir_list, json_output);
         return EXIT_SUCCESS;
+    }
+
+    if (non_history)
+    {
+        peng_non_history = TRUE;
     }
 
     std::list<std::string> disable_list;
